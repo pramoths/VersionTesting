@@ -4,5 +4,5 @@ import "log"
 
 func main() {
 
-	log.Println("Initiate Testing 3")
+	log.Println("Initiate Testing 5")
 }
