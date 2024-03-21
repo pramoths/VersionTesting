@@ -31,7 +31,8 @@ jobs:
       - name: Get previous tag
         id: get_previous_tag
         run: |
-          echo "::set-output name=previous_tag::$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))"
+          previous_tag=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))"
+          echo "Previous version in new : $previous_tag"
 
       
       - name: Bump version
@@ -42,13 +43,15 @@ jobs:
           
           # Extract the version number
           version="${previous_tag##*/v}"
+
+          echo "Version $version"
           
           # Increment the version (assuming it follows semantic versioning X.Y.Z)
           IFS='.' read -r major minor patch <<< "$version"
           patch=$((patch + 1))
           new_version="${major}.${minor}.${patch}"
           
-          echo "::set-output name=new_version::$new_version"
+          echo "New Version = $new_version"
 
       - name: Tag and push changes
         env:
