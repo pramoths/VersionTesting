@@ -1,0 +1,35 @@
+name: Auto Tag on Commit
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to the branch you want to tag
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config user.name "Your GitHub Username"
+          git config user.email "your-email@example.com"
+
+      - name: Get the latest tag
+        id: get-latest-tag
+        run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+
+      - name: Create a new tag
+        id: create-tag
+        run: |
+          # Increment the version based on your desired scheme (e.g., semantic versioning)
+          # Example: v1.0.0 -> v1.0.1
+          NEW_TAG=$(echo "${{ steps.get-latest-tag.outputs.tag }}" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
+
+      - name: Show the new tag
+        run: echo "New tag ${{ steps.create-tag.outputs.tag }}"
