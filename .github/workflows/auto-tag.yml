@@ -22,6 +22,12 @@ jobs:
         id: get-latest-tag
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
 
+      - name: Get previous tag
+        run: |
+          git fetch --prune --unshallow
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1)
+          echo "Previous tag: $PREV_TAG"
+
       - name: Create a new tag
         id: create-tag
         run: |
