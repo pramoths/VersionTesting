@@ -3,7 +3,7 @@ name: Auto Tag on Commit
 on:
   push:
     branches:
-      - main  # Adjust this to the branch you want to tag
+      - QA  # Adjust this to the branch you want to tag
 
 jobs:
   auto-tag:
