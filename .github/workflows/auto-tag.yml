@@ -23,6 +23,7 @@ jobs:
         run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
 
       - name: Get previous tag old
+        id: getPreVersion
         run: |
           git fetch --prune --unshallow
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1)
@@ -39,10 +40,10 @@ jobs:
         id: bump_version
         run: |
           # Extract the previous tag
-          previous_tag="${{ steps.get_previous_tag.outputs.previous_tag }}"
+          previous_tag="${{ steps.getPreVersion.outputs.PREV_TAG }}"
           
           # Extract the version number
-          version="${previous_tag##*/v}"
+          version="${previous_tag}"
 
           echo "Version $version"
           
